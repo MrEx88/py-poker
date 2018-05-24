@@ -1,12 +1,18 @@
+# Make sure to specify the utf-8 encoding (because of the suits) when reading from the REPL. 
+#   exec(open("<filepath>\\poker.py", encoding="utf-8").read())
+
 import itertools
 import random
 
-
+HEART   = '♥' # Alt+3
+DIAMOND = '♦' # Alt+4
+CLUB    = '♣' # Alt+5
+SPADE   = '♠' # Alt+6
 ALL_RANKS = '23456789TJQKA'
-ALL_SUITS = 'SDCH'
+ALL_SUITS = HEART + DIAMOND + CLUB + SPADE
 ONE_DECK = [r+s for r in ALL_RANKS for s in ALL_SUITS]
-ALL_RED_CARDS = [rs for rs in ONE_DECK if 'D' in rs or 'H' in rs]
-ALL_BLACK_CARDS = [rs for rs in ONE_DECK if 'S' in rs or 'C' in rs]
+ALL_RED_CARDS = [rs for rs in ONE_DECK if DIAMOND in rs or HEART in rs]
+ALL_BLACK_CARDS = [rs for rs in ONE_DECK if SPADE in rs or CLUB in rs]
 
 def poker(hands):
     "Returns a list of winning hands: poker([hand, ...]) => [hand, ...]"
@@ -102,11 +108,11 @@ def replacements(card):
     
     
 def test():
-    sf = "6C 7C 8C 9C TC".split()
-    sf2 = "6D 7D 8D 9D TD".split() # Straight Flush
-    fk = " 9D 9H 9S 9C 7D".split()
-    fh = "TD TC TH 7C 7D".split()
-    tp = "5S 5D 9H 9C 6S".split() # Two pairs
+    sf = ("6%s 7%s 8%s 9%s T%s" % tuple(itertools.repeat(CLUB, 5))).split()
+    sf2 = ("6%s 7%s 8%s 9%s T%s" % tuple(itertools.repeat(DIAMOND, 5))).split() # Straight Flush
+    fk = ("9%s 9%s 9%s 9%s 7%s" % (DIAMOND, HEART, SPADE, CLUB, DIAMOND)).split()
+    fh = ("T%s T%s T%s 7%s 7%s" % (DIAMOND, CLUB, HEART, CLUB, DIAMOND)).split()
+    tp = ("5%s 5%s 9%s 9%s 6%s" % (SPADE, DIAMOND, HEART, CLUB, SPADE)).split() # Two pairs
     fkranks = card_ranks(fk)
     tpranks = card_ranks(tp)
     assert kind(4, fkranks) == 9
@@ -127,12 +133,12 @@ def test():
     
     
 def test_best_five():
-    assert sorted(best_five("6C 7C 8C 9C TC 5C JS".split())) \
-        == ['6C', '7C', '8C', '9C', 'TC']
-    assert sorted(best_five("TD TC TH 7C 7D 8C 8S".split())) \
-        == ['8C', '8S', 'TC', 'TD', 'TH']
-    assert sorted(best_five("TD TC TS 7C 7D 7S 7H".split())) \
-        == ['7C', '7D', '7H', '7S', 'TD']
+    assert sorted(best_five(("6%s 7%s 8%s 9%s T%s 5%s J%s" % (CLUB, CLUB, CLUB, CLUB, CLUB, CLUB, SPADE)).split())) \
+        == ['6'+CLUB, '7'+CLUB, '8'+CLUB, '9'+CLUB, 'T'+CLUB]
+    assert sorted(best_five(("T%s T%s T%s 7%s 7%s 8%s 8%s" % (HEART, CLUB, DIAMOND, CLUB, DIAMOND, CLUB, SPADE)).split())) \
+        == ['8'+SPADE, '8'+CLUB, 'T'+CLUB, 'T'+HEART, 'T'+DIAMOND]
+    assert sorted(best_five(("T%s T%s T%s 7%s 7%s 7%s 7%s" % (DIAMOND, CLUB, SPADE, CLUB, DIAMOND, SPADE, HEART)).split())) \
+        == ['7'+SPADE, '7'+CLUB, '7'+HEART, '7'+DIAMOND, 'T'+DIAMOND]
     return "test_best_five passes"
     
     
