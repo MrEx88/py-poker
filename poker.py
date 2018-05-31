@@ -107,41 +107,6 @@ def replacements(card):
     else: return [card]
     
     
-def test():
-    sf = ("6%s 7%s 8%s 9%s T%s" % tuple(itertools.repeat(CLUB, 5))).split()
-    sf2 = ("6%s 7%s 8%s 9%s T%s" % tuple(itertools.repeat(DIAMOND, 5))).split() # Straight Flush
-    fk = ("9%s 9%s 9%s 9%s 7%s" % (DIAMOND, HEART, SPADE, CLUB, DIAMOND)).split()
-    fh = ("T%s T%s T%s 7%s 7%s" % (DIAMOND, CLUB, HEART, CLUB, DIAMOND)).split()
-    tp = ("5%s 5%s 9%s 9%s 6%s" % (SPADE, DIAMOND, HEART, CLUB, SPADE)).split() # Two pairs
-    fkranks = card_ranks(fk)
-    tpranks = card_ranks(tp)
-    assert kind(4, fkranks) == 9
-    assert kind(3, fkranks) == None
-    assert kind(2, fkranks) == None
-    assert kind(1, fkranks) == 7
-    assert straight([9, 8, 7, 6, 5]) == True
-    assert straight([9, 8, 8, 6, 5]) == False
-    assert flush(sf) == True
-    assert flush(fk) == False
-    assert poker([sf, fk, fh]) == [sf]
-    assert poker([fk, fh]) == [fk]
-    assert poker([fh, fh]) == [fh, fh]
-    assert poker([sf]) == [sf]
-    assert poker([sf] + 99*[fh]) == [sf]
-    assert poker([sf, sf2, fk, fh]) == [sf, sf2] 
-    return "tests pass"
-    
-    
-def test_best_five():
-    assert sorted(best_five(("6%s 7%s 8%s 9%s T%s 5%s J%s" % (CLUB, CLUB, CLUB, CLUB, CLUB, CLUB, SPADE)).split())) \
-        == ['6'+CLUB, '7'+CLUB, '8'+CLUB, '9'+CLUB, 'T'+CLUB]
-    assert sorted(best_five(("T%s T%s T%s 7%s 7%s 8%s 8%s" % (HEART, CLUB, DIAMOND, CLUB, DIAMOND, CLUB, SPADE)).split())) \
-        == ['8'+SPADE, '8'+CLUB, 'T'+CLUB, 'T'+HEART, 'T'+DIAMOND]
-    assert sorted(best_five(("T%s T%s T%s 7%s 7%s 7%s 7%s" % (DIAMOND, CLUB, SPADE, CLUB, DIAMOND, SPADE, HEART)).split())) \
-        == ['7'+SPADE, '7'+CLUB, '7'+HEART, '7'+DIAMOND, 'T'+DIAMOND]
-    return "test_best_five passes"
-    
-    
 ONE_DECK = [r+s for r in ALL_RANKS for s in ALL_SUITS]
 
 def deal(numhands, n=5, deck=ONE_DECK):
@@ -156,6 +121,4 @@ def deal(numhands, n=5, deck=ONE_DECK):
         
     return hands
     
-print(deal(2))
-print(test())
-print(test_best_five())
+#print(deal(2))
