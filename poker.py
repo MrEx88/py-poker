@@ -4,15 +4,39 @@
 import itertools
 import random
 
+class Card():
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
+        
+        
+    def __str__(self):
+        return self.rank + self.suit
+        
+        
+        
+class Hand():
+    def __init__(self, cards):
+        self.cards
+        self.rank = HandRank.get_rank(cards)
+        
+        
+    def get_rank(cards):
+        pass
+        #todo: come up with a different solution than --> def hand_rank(hand):
+        
+        
+TOTAL_CARDS = 5
 HEART   = '♥' # Alt+3
 DIAMOND = '♦' # Alt+4
 CLUB    = '♣' # Alt+5
 SPADE   = '♠' # Alt+6
 ALL_RANKS = '23456789TJQKA'
 ALL_SUITS = HEART + DIAMOND + CLUB + SPADE
-ONE_DECK = [r+s for r in ALL_RANKS for s in ALL_SUITS]
-ALL_RED_CARDS = [rs for rs in ONE_DECK if DIAMOND in rs or HEART in rs]
-ALL_BLACK_CARDS = [rs for rs in ONE_DECK if SPADE in rs or CLUB in rs]
+ALL_CARDS = [Card(r, s) for r in ALL_RANKS for s in ALL_SUITS]
+ALL_RED_CARDS = [rs for rs in ALL_CARDS if DIAMOND in str(rs) or HEART in str(rs)]
+ALL_BLACK_CARDS = [rs for rs in ALL_CARDS if SPADE in str(rs) or CLUB in str(rs)]
+
 
 def poker(hands):
     "Returns a list of winning hands: poker([hand, ...]) => [hand, ...]"
@@ -27,6 +51,7 @@ def allmax(iterable, key=None):
             winners.append(itr)
             
     return winners
+    
     
 def hand_rank(hand):
     """Return a value indicating the ranking of a hand."""
@@ -60,12 +85,13 @@ def card_ranks(hand):
     
 def best_five(hand):
     "Takes a hand and gives the best 5 cards."
-    return max(itertools.combinations(hand, 5), key=hand_rank)
+    return max(itertools.combinations(hand, TOTAL_CARDS), key=hand_rank)
     
     
 def straight(ranks):
     "Return True if the ordered ranks form a 5-card straight."
     return (max(ranks) - min(ranks)) == 4  and len(set(ranks)) == 5
+    
     
 def flush(hand):
     "Return True if all the cards have the same suit."
@@ -95,7 +121,7 @@ def two_pair(ranks):
 def best_wild_hand(hand):
     "Trys all values for jokers in all 5-card selections."
     hand = set(best_hand(h)
-                for h in itertools.product(*map(replacements, hand)))
+               for h in itertools.product(*map(replacements, hand)))
     return max(hands, key=hand_rank)
     
     
@@ -107,14 +133,13 @@ def replacements(card):
     else: return [card]
     
     
-ONE_DECK = [r+s for r in ALL_RANKS for s in ALL_SUITS]
-
-def deal(numhands, n=5, deck=ONE_DECK):
+def deal(numhands):
+    deck = list(ALL_CARDS)
     hands = []
     random.shuffle(deck)
     for k in range(numhands):
         hand = []
-        for i in range(n):
+        for i in range(TOTAL_CARDS):
             num = random.randint(0, len(deck)-1)
             hand.append(deck.pop(num))
         hands.append(hand)
