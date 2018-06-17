@@ -39,11 +39,6 @@ class Hands(unittest.TestCase):
         self.assertEqual(holdem.get_winning_hands([self.straight_flush] + 99*[self.full_house]), [self.straight_flush])
         self.assertEqual(holdem.get_winning_hands([self.straight_flush, self.straight_flush2, self.four_of_kind, self.full_house]), [self.straight_flush, self.straight_flush2])
         
-       
-def run():
-    unittest.main()
-    
-    
+        
 if __name__ == '__main__':
-    run() #unittest.main()
-
+    unittest.main()
